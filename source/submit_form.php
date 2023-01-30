@@ -11,10 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /* "trim" pour enlever les espaces en début et fin de chaîne de caractères*/
     
      //identifiants mysql
-     $host = getenv("MYSQL_HOST");
+     $host = "database"; 
+     $username = "root"; 
+     $userpassword = "root"; 
+     $database = "form_db"; 
+    /* $host = getenv("MYSQL_HOST");
      $username = getenv("MYSQL_ROOT_USER");
      $userpassword = getenv("MYSQL_ROOT_PASSWORD");
-     $database = getenv("MYSQL_DATABASE");
+     $database = getenv("MYSQL_DATABASE");*/
 
      //La fonction die() arrête l'exécution du code PHP et affiche le message d'erreur.
      if (!$name) {
@@ -29,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!$confirm_password || $password !== $confirm_password) {
         die("Passwords do not match");
         }
+
+    //password_hash() pour hasher le mot de passe avant de l'insérer dans la base de données.
+    //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     //Ouvrir une nouvelle connexion au serveur MySQL
     $mysqli = new mysqli($host, $username, $userpassword, $database);
@@ -49,13 +56,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         Cela aide à protéger contre les attaques par injection SQL en échappant les données entrées par l'utilisateur. */
 
     //Associer les valeurs
-    $statement->bind_param('sss', $name, $email, $password);
+    $statement->bind_param('sss', $name, $email, $password );//$hashedPassword
         // "bind_param" permet d'associer des valeurs à des marqueurs( c les ?) dans une requête préparée (ici "INSERT INTO").
         // 's' est un type de données qui indique que les ? sont des chaînes de caractères.
 
     //la méthode execute() est utilisée pour exécuter la requête d'insertion avec les valeurs associées.
     if($statement->execute()){
-        print "Hello " . $name . "!, your email address is ". $email;
+        echo "<div class='sucess'>
+            <h3>Hello $name</h3>
+            <h3> You are successfully registered.</h3>
+            <p>Click here to <a href='login.php'>log in</a></p>
+       </div>";
         }else{
             print $mysqli->error; 
         } 
