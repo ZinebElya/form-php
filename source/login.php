@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //utilisateur trouvé, démarrer une nouvelle session et rediriger vers une page
         //session_start(); a supprimer
         $_SESSION['user_id'] = $user['id'];
-        header("Location: home.php");
+        header("Location: submit_converter_form.php");
       //  exit();
     } else {
         //utilisateur non trouvé, afficher un message d'erreur
